@@ -1,0 +1,18 @@
+{
+  "name": "mern_project",
+  "version": "1.0.0",
+  "description": "E shopping web app with MERN stack",
+  "type": "module",
+  "main": "server.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "node backend/server.js"
+  },
+  "author": "Vinay Jadhav",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
