@@ -4,17 +4,17 @@ export const addDecimal = (num) => {
 
 export const updateCart = (state) => {
   //calculate items Price
-  state.itemPrice = addDecimal(
+  state.itemsPrice = addDecimal(
     state.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
   );
 
   //calculate shipping Price (if order is over $100 then free or else $10 shipping)
-  state.shippingPrice = addDecimal(state.itemPrice > 100 ? 0 : 10);
+  state.shippingPrice = addDecimal(state.itemsPrice > 100 ? 0 : 10);
   //calculate tax Price(12% tax)
-  state.taxPrice = addDecimal(Number(0.15 * state.itemPrice).toFixed(2));
+  state.taxPrice = addDecimal(Number(0.15 * state.itemsPrice).toFixed(2));
   //calculate total Price
   state.totalPrice = (
-    Number(state.itemPrice) +
+    Number(state.itemsPrice) +
     Number(state.shippingPrice) +
     Number(state.taxPrice)
   ).toFixed(2);
