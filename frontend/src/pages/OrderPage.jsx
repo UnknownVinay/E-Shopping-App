@@ -1,12 +1,19 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-import { Row, Col, ListGroup, Image, Form, Card } from "react-bootstrap";
+import { Row, Col, ListGroup, Image, Card, Button } from "react-bootstrap";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-import { useGetOrderDetailsQuery } from "../slices/ordersApiSlice";
+import {
+  useGetOrderDetailsQuery,
+  useDeliverOrderMutation,
+} from "../slices/ordersApiSlice";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const OrderPage = () => {
   const { id: orderId } = useParams();
+
+  const { userInfo } = useSelector((state) => state.auth);
 
   const {
     data: order,
@@ -14,6 +21,19 @@ const OrderPage = () => {
     isLoading,
     error,
   } = useGetOrderDetailsQuery(orderId);
+
+  const [deliverOrder, { isLoading: deliveredLoading }] =
+    useDeliverOrderMutation();
+
+  const deliverOrderHandler = async () => {
+    try {
+      await deliverOrder(orderId);
+      refetch();
+      toast.success("Order Delivered");
+    } catch (error) {
+      toast.error(error?.data?.message || error?.message);
+    }
+  };
 
   return isLoading ? (
     <Loader />
@@ -108,7 +128,21 @@ const OrderPage = () => {
                 </Row>
               </ListGroup.Item>
               {/* Pay Order Placeholder */}
-              {/* MArk as Deliverd Placeholder */}
+              {deliveredLoading && <Loader />}
+              {userInfo &&
+                userInfo.isAdmin &&
+                userInfo.isPaid &&
+                !userInfo.isDelivered && (
+                  <ListGroup.Item>
+                    <Button
+                      type="button"
+                      className="btn btn-block"
+                      onClick={deliverOrderHandler}
+                    >
+                      Mark as Delivered
+                    </Button>
+                  </ListGroup.Item>
+                )}
             </ListGroup>
           </Card>
         </Col>
