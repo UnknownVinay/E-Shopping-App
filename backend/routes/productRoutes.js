@@ -8,10 +8,13 @@ import {
   editProductById,
   deleteProductById,
   createProductReview,
+  getTopRatedProduct,
 } from "../controller/productController.js";
 import { protect, admin } from "../middleware/authMiddleware.js";
 
 router.route("/").get(getProducts).post(protect, admin, createProducts);
+
+router.route("/top").get(getTopRatedProduct);
 
 router
   .route("/:id")
